@@ -31,9 +31,8 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use('/', authRouter);
-app.use('/myParkings', parkingRouter)
-app.use('/myParking/:id', parkingRouter)
-app.use('/myParkings', commentRouter)
+app.use('/', parkingRouter)
+app.use('/', commentRouter)
 
 
 app.use((req, res, next) => {

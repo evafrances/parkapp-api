@@ -55,10 +55,10 @@ const userSchema = new mongoose.Schema({
     ref: 'Cars',
     // required: true
   },
-  parkings: {
-    type: mongoose.Types.ObjectId,
-    ref: 'Parking'
-  }
+  // parkings: {
+  //   type: mongoose.Types.ObjectId,
+  //   ref: 'Parking'
+  // }    
 }, {
     timestamps: true,
     toJSON: {
@@ -88,6 +88,11 @@ userSchema.pre('save', function (next) {
       .catch(error => next(error))
   }
 });
+
+// userSchema.virtual('Parking', {
+//   ref: 'Parking',
+  
+// })
 
 userSchema.methods.checkPassword = function (password) {
   return bcrypt.compare(password, this.password);
