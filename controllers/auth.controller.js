@@ -45,6 +45,11 @@ module.exports.update = (req, res, next) => {
     });
 }
 
+//guarda la info que el usuario tiene en su app
+module.exports.profile = (req, res, next) => {
+  res.json(req.user);
+}
+
 module.exports.logout = (req, res, next) => {
   req.logout();
   res.status(204).json();

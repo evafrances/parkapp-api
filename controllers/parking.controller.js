@@ -1,91 +1,61 @@
 const Parking = require('../models/parking.model');
+const User = require('../models/user.model');
 const createError = require('http-errors');
 const axios = require('axios')
 
-//All the parking
-module.exports.parkings = (req, res, next) => {
-  axios.get('https://datos.madrid.es/egob/catalogo/202625-0-aparcamientos-publicos.json')
-  .then(function (response) {
-    console.log(response.data['@graph']);
-    const obj = JSON.stringify(response.data)
-    response.data['@graph'].forEach(element => {
+module.exports.list = (req, res, next) => {
+  Parking.find()
+    .then(parkings => res.json(parkings))
+    .catch(next)
+}
 
-      const { title, location } = element;
-
-      let parking = {
-        name: title,
-        //${} porque en el json nos viene como un objeto
-        address: `${location}`,
-        //en model lo tengo como nº, no como string
-        price: 0,
-        places: 0
-        }
-
-      new Parking(parking).save()
-      .then(()=> console.log('everythings ok'))
-      .catch((err) => console.log(err+'Fail'))
-      res.json(response.data['@graph'])
-    });
-  })
-  .catch(function (error) {
-    // handle error
-    console.log(error);
-  })
-  .finally(function () {
-    // always executed
-  });
+module.exports.get = (req, res, next) => {
+  Parking.findById(req.params.parkingId)
+    .then(parking => {
+      if (!parking) {
+        throw createError(404, 'Parking not found')
+      } else {
+        res.json(parking)
+      }
+    })
+    .catch(next)
 }
 
 //All the parking that the user have
-module.exports.favParkings = (req, res, next) => {
-  const {
-    id
-  } = req.user;
-
-  User.findById(id) //* Here you are searching inside user collection
-    .populate('Parking') // * To bring all the data from that model
-    .then(user => res.json(user.parkings))
+module.exports.listFavs = (req, res, next) => {
+  User.findById(req.user.id)
+    .populate('favParkings.parking')
+    .then(user => res.json(user.favParkings))
     .catch(next)
 }
 
-//Bring me only that parking
-module.exports.thisParking = (req, res, next) => {
-  Parking.findById(req.params.id)
-    .then(parking => {
-      if (!parking) {
-        throw createError(404, 'Parking not found')
-      } else {
-        res.json(parking)
-      }
-    })
+module.exports.addToFavs = (req, res, next) => {
+  // TODO: eliminar duplicados 
+  req.user.favParkings.push({
+    parking: req.params.id
+  })
+
+  req.user.save()
+    .then(user => res.status(204).json())
     .catch(next)
-}
-
-module.exports.addFavParking = (req, res, next) => {
-
 }
 
 //Update that parking like you want
-module.exports.parkingUpdate = (req, res, next) => {
-  Parking.findByIdAndUpdate(req.params.id, {
-      $set: req.body
-    }, {
-      new: true,
-      runValidators: true
+module.exports.updateFavParking = (req, res, next) => {
+  User.findById(req.user.id)
+    .then(user => {
+      const parking = user.favParkings.find(fav => fav.parking == req.params.parkingId)
+      parking.name = req.body.name;
+      return user.save()
     })
-    .then(parking => {
-      if (!parking) {
-        throw createError(404, 'Parking not found')
-      } else {
-        res.json(parking)
-      }
-    })
+    .then(user => res.status(204).json())
     .catch(next)
 }
 
 //Delete that parking
 module.exports.parkingDelete = (req, res, next) => {
-  Parking.findByIdAndDelete(req.params.id)
+  // TODO: borrarlo del array de favs
+  Parking.findByIdAndDelete(req.params.parkingId)
     .then(parking => {
       if (!parking) {
         throw createError(404, 'Parking not found')

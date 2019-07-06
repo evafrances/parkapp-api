@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 module.exports = session({
   secret: 'SuperSecret - (Change it)',
-  resave: false,
+  resave: true,
   saveUninitialized: true,
   cookie: {
     secure: false,

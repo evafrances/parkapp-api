@@ -15,11 +15,12 @@ const cors = require('./configs/cors.config');
 const authRouter = require('./routes/auth.routes');
 const commentRouter = require('./routes/comment.routes');
 const parkingRouter = require('./routes/parking.routes');
+const ordersRouter = require('./routes/orders.routes');
 
 const app = express();
 
 const secure = require('./middlewares/secure.mid');
-const existsParking= require('./middlewares/exitstsParking.mid');
+const existsParking= require('./middlewares/parking.mid');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -31,8 +32,9 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use('/', authRouter);
-app.use('/', parkingRouter)
+app.use('/parkings', parkingRouter)
 app.use('/', commentRouter)
+app.use('/parkings/:id/orders', ordersRouter)
 
 
 app.use((req, res, next) => {

@@ -7,11 +7,26 @@ const parkingSchema = new mongoose.Schema({
     },
     address: {
       type: String,
-      required: [true, 'Your address']
+      required: 'Your address'
+    },
+    location: {
+      type: {
+        type: String, // Don't do `{ location: { type: String } }`
+        enum: ['Point'], // 'location.type' must be 'Point'
+        required: true
+      },
+      coordinates: {
+        type: [Number],
+        required: true
+      }
     },
     price: {
         type: Number,
-        required: [true]
+        required: true
+    },
+    timetable: {
+        type: Number,
+        required: true
     },
     places: {
         type: Number,
@@ -24,6 +39,7 @@ const parkingSchema = new mongoose.Schema({
         ret.id = doc._id;
         delete ret._id;
         delete ret.__v;
+        ret.location = ret.location.coordinates;
         return ret;
       }
     },

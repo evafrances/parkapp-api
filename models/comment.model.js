@@ -8,7 +8,7 @@ const commentSchema = new mongoose.Schema({
     max: 100
   },
   parkings: {
-    type: mongoose.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Parking',
     required: true
   }

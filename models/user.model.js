@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
     // required: [true, 'Email required'],
     unique: true, 
     trim: true,
+    lowercase: true
   },
   password: {
     type: String,
@@ -36,9 +37,7 @@ const userSchema = new mongoose.Schema({
     // required: [true, 'Your address'],
     default: 'burgos',
   },
-  country: {
-    type: String,
-  },
+  country: String,
   city: {
     type: String,
     // required: [true, 'The city where you live'],
@@ -50,15 +49,24 @@ const userSchema = new mongoose.Schema({
   cardNumber: {
     type: Number,
   },
+  //! Preguntar a Carlos. 
+  //! Porqué aveces pone Schema.Types y otras no
   cars: {
-    type: mongoose.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Cars',
     // required: true
   },
-  // parkings: {
-  //   type: mongoose.Types.ObjectId,
-  //   ref: 'Parking'
-  // }    
+  favParkings: [{ 
+    name: {
+      type: String,
+      default: ''
+    },
+    parking: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Parking',
+      required: true
+    }
+  }]
 }, {
     timestamps: true,
     toJSON: {
@@ -89,10 +97,12 @@ userSchema.pre('save', function (next) {
   }
 });
 
-// userSchema.virtual('Parking', {
-//   ref: 'Parking',
-  
-// })
+userSchema.virtual('orders', {
+  ref: 'Order',
+  localField: '_id',
+  foreignField: 'user',
+  options: { sort: { createAt: -1 } }
+});
 
 userSchema.methods.checkPassword = function (password) {
   return bcrypt.compare(password, this.password);
