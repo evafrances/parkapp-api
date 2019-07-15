@@ -9,7 +9,7 @@ router.get('/', parkingController.list)
 router.get('/fav', parkingController.listFavs)
 // Te trae un favorito en especifico
 router.get('/:parkingId', parking.existsParking, parkingController.get)
-router.post('/:parkingId/fav', parking.existsParking, parkingController.addToFavs)
+router.get('/:parkingId/fav', parking.existsParking, parkingController.addToFavs)
 router.put('/:parkingId/fav', parking.existsParking, parkingController.updateFavParking)
 router.delete('/:parkingId/fav', parking.existsParking, parkingController.parkingDelete)
 

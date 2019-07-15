@@ -5,7 +5,7 @@ const SALT_WORK_FACTOR = 10
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
-    // required: [true, 'Email required'],
+    required: [true, 'Email required'],
     unique: true, 
     trim: true,
     lowercase: true
@@ -26,12 +26,9 @@ const userSchema = new mongoose.Schema({
     // required: [true, 'Your surname'],
     default: '',
   }, 
-  phone: {
-    type: Number,
-    unique: [true], 
-    // required: [true, 'Your phone number'],
-    default: '1234567',
-  }, 
+  // phone: {
+  //   type: Number
+  // }, 
   address: {
     type: String,
     // required: [true, 'Your address'],
@@ -64,7 +61,7 @@ const userSchema = new mongoose.Schema({
     parking: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Parking',
-      required: true
+      // required: true
     }
   }]
 }, {

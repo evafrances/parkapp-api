@@ -28,9 +28,19 @@ const parkingSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    available: {
+      type: Boolean,
+      required: true
+  },
     places: {
         type: Number,
         required: [true]
+    },
+    image: {
+      type: String,
+    },
+    description: {
+      type: String,
     }
     }, {
     timestamps: true,

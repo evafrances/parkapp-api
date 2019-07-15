@@ -13,7 +13,7 @@ module.exports.get = (req, res, next) => {
   Parking.findById(req.params.parkingId)
     .then(parking => {
       if (!parking) {
-        throw createError(404, 'Parking not found')
+        throw createError(504, 'Parking not found!')
       } else {
         res.json(parking)
       }
@@ -24,16 +24,32 @@ module.exports.get = (req, res, next) => {
 //All the parking that the user have
 module.exports.listFavs = (req, res, next) => {
   User.findById(req.user.id)
+  //con el 'populate', lo estamos relacionando en user models, para relacionar los que ha marcado como favs
     .populate('favParkings.parking')
     .then(user => res.json(user.favParkings))
     .catch(next)
 }
 
 module.exports.addToFavs = (req, res, next) => {
-  // TODO: eliminar duplicados 
-  req.user.favParkings.push({
-    parking: req.params.id
-  })
+  // TODO: eliminar duplicados   
+// * 1) buscar si el parking ya existe
+console.log(req.params.parkingId)
+const existe = req.user.favParkings.some((el, i) => {
+  
+  return el.parking == req.params.parkingId
+})
+console.log(req.user.favParkings)
+  if(!existe){
+    // * 3) si no existe, le hacemos el push
+    console.log('No existe')
+    req.user.favParkings.push({
+      parking: req.params.parkingId
+    })
+  } else{
+    console.log('Ya existe')
+    // * 2) si ya existe, return status 500 (no se puede añadir)
+    throw createError(500, 'It is in the list!')
+  }
 
   req.user.save()
     .then(user => res.status(204).json())
