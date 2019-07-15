@@ -9,12 +9,16 @@ module.exports.list = (req, res, next) => {
     .catch(next)
 }
 
-module.exports.get = (req, res, next) => {
+module.exports.get = (req, res, next) => { // retorna un solo parking
+  console.log(req.params.parkingId)
   Parking.findById(req.params.parkingId)
     .then(parking => {
       if (!parking) {
         throw createError(504, 'Parking not found!')
-      } else {
+      } else {        
+        console.log(req.user) //req.user is not defined. 
+        // parking.isFavorite = req.user.favParkings.some(el => el === req.params.parkingId)
+        // console.log(parking.isFavorite)
         res.json(parking)
       }
     })
@@ -58,9 +62,12 @@ console.log(req.user.favParkings)
 
 //Update that parking like you want
 module.exports.updateFavParking = (req, res, next) => {
+  console.log('eva')
   User.findById(req.user.id)
     .then(user => {
-      const parking = user.favParkings.find(fav => fav.parking == req.params.parkingId)
+      console.log(user)
+      const parking = us
+      er.favParkings.find(fav => fav.parking == req.params.parkingId)
       parking.name = req.body.name;
       return user.save()
     })
