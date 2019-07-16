@@ -16,6 +16,7 @@ const authRouter = require('./routes/auth.routes');
 const commentRouter = require('./routes/comment.routes');
 const parkingRouter = require('./routes/parking.routes');
 const ordersRouter = require('./routes/orders.routes');
+const mailRouter = require('./routes/mail.routes');
 
 const app = express();
 
@@ -32,8 +33,9 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use('/', authRouter);
-app.use('/parkings', parkingRouter)
 app.use('/', commentRouter)
+app.use('/parkings', parkingRouter)
+app.use('/', mailRouter)
 app.use('/parkings/:id/orders', ordersRouter)
 
 
