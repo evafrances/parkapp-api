@@ -9,6 +9,8 @@ const passport = require('passport');
 
 require('./configs/db.config.js');
 require('./configs/passport.config');
+require('dotenv').config();
+
 const session = require('./configs/session.config')
 const cors = require('./configs/cors.config');
 
