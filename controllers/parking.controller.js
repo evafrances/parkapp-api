@@ -35,43 +35,28 @@ module.exports.listFavs = (req, res, next) => {
 }
 
 module.exports.addToFavs = (req, res, next) => {
-  // TODO: eliminar duplicados   
-// * 1) buscar si el parking ya existe
-console.log(req.params.parkingId)
-const existe = req.user.favParkings.some((el, i) => {
-  
-  return el.parking == req.params.parkingId
-})
-console.log(req.user.favParkings)
+  const existe = req.user.favParkings.some((el, i) => el.parking.toString() == req.params.parkingId)
+
   if(!existe){
-    // * 3) si no existe, le hacemos el push
-    console.log('No existe')
     req.user.favParkings.push({
       parking: req.params.parkingId
     })
   } else{
-    console.log('Ya existe')
-    // * 2) si ya existe, return status 500 (no se puede añadir)
-    throw createError(500, 'It is in the list!')
+    throw createError(400, 'It is in the list!')
   }
 
   req.user.save()
-    .then(user => res.status(204).json())
+    .then(() => res.status(204).json())
     .catch(next)
 }
 
 //Update that parking like you want
 module.exports.updateFavParking = (req, res, next) => {
-  console.log('eva')
-  User.findById(req.user.id)
-    .then(user => {
-      console.log(user)
-      const parking = us
-      er.favParkings.find(fav => fav.parking == req.params.parkingId)
-      parking.name = req.body.name;
-      return user.save()
-    })
-    .then(user => res.status(204).json())
+  const favParking = req.user.favParkings.find(fav => fav.parking.toString() === req.params.parkingId)
+  favParking.name = req.body.name
+
+  req.user.save()
+    .then(() => res.json())
     .catch(next)
 }
 

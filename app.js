@@ -34,9 +34,9 @@ app.use(session)
 app.use(passport.initialize())
 app.use(passport.session())
 
+app.use('/parkings', parkingRouter)
 app.use('/', authRouter);
 app.use('/', commentRouter)
-app.use('/parkings', parkingRouter)
 app.use('/', mailRouter)
 app.use('/parkings/:id/orders', ordersRouter)
 
