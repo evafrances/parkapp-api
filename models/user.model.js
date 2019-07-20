@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
   name:{
     type:String,
     // required: [true, 'Your name'],
-    default: 'Eva',
+    default: 'josue',
     minlength: 3
   }, 
   surname: {

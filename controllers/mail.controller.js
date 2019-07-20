@@ -19,10 +19,10 @@ module.exports.apply = (req, res, next) => {
         text: 'sos una crack ',
       })
         .then(info => {
-            res.json({hola:'todo OK'})
-            //! Ayuda para restar plazas
-            Parking.findByIdAndUpdate({_id:this.props.body.parking, places: -1})
-            .then()
+            Parking.findByIdAndUpdate({ _id: req.body.parking }, { $inc: { places: -1 }})
+                .then(() => {
+                    res.json({hola:'todo OK'})
+                })
         })
         .catch(error => console.log(error))  }
 

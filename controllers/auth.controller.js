@@ -34,6 +34,10 @@ module.exports.authenticate = (req, res, next) => {
   })(req, res, next);
 }
 
+module.exports.profile = (req, res, next) => {
+  console.log('pppp')
+}
+
 module.exports.update = (req, res, next) => {
   delete req.body.email; //never update the mail. 
   const user = req.user;
