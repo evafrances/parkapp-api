@@ -15,7 +15,6 @@ module.exports.register = (req, res, next) => {
     .then(user => res.status(201).json(user))
     .catch(next)
 }
-
 module.exports.authenticate = (req, res, next) => {
   passport.authenticate('auth-local', (error, user, message) => {
     if (error) {

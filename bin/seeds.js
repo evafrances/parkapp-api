@@ -30,7 +30,7 @@ const syncParkings = () => axios.get('https://datos.madrid.es/egob/catalogo/2026
             },
             //en model lo tengo como nº, no como string
             price: 1.20 + (Math.random()),
-            timetable: 0,
+            timetable: 12,
             available: faker.random.boolean(),
             places: Math.floor(Math.random() * 10) + 1  ,
             image: faker.random.uuid(),

@@ -14,7 +14,7 @@ module.exports.apply = (req, res, next) => {
       
       transporter.sendMail({
         from: `"My Awesome Project 👻" <${user}>`,
-        to: 'evafrancesmartin@gmail.com', //!<== req.user.emial AYUDA!!!
+        to: 'evafrancesmartin@gmail.com', //!<== req.user.emial AYUDA!!! <3
         subject: 'Ohhh mama', 
         text: 'sos una crack ',
       })
