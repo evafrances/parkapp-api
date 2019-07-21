@@ -30,7 +30,10 @@ module.exports.listFavs = (req, res, next) => {
   User.findById(req.user.id)
   //con el 'populate', lo estamos relacionando en user models, para relacionar los que ha marcado como favs
     .populate('favParkings.parking')
-    .then(user => res.json(user.favParkings))
+    .then(user => {
+      console.log(user.favParkings)
+      return res.json(user.favParkings)})
+
     .catch(next)
 }
 
@@ -39,9 +42,12 @@ module.exports.addToFavs = (req, res, next) => {
 
   if(!existe){
     req.user.favParkings.push({
-      parking: req.params.parkingId
+      parking: req.params.parkingId,
+      name: req.params.name
     })
   } else{
+    console.log(req.user.favParkings)
+    console.log(req.params.parkingId)
     throw createError(400, 'It is in the list!')
   }
 
